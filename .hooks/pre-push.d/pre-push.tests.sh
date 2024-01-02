@@ -17,7 +17,7 @@ branch_regex="^(feature|bugfix|hotfix|playground|juggle)_[a-zA-Z0-9]{2,36}$"
 #How many commits a feature branch can be missing from the gmml-test branch
 MAX_FEATURE_BEHIND_TEST=15
 
-if [[ $(pwd) == */gems/gmml ]]; then
+if [[ $(pwd) == */gems/gmmlForkTest ]]; then
     GMML_DIR=$(pwd)
     #checkin to be sure
     if [ "${GMML_DIR}" != "$(git rev-parse --show-toplevel)" ]; then
@@ -97,7 +97,7 @@ ensure_feature_close()
 ## OG Oct 2021 have the hooks update themselves.
 #TODO: Do this more auto like, if this script is updated the first run the next time will not
 #reflect the made changes due to the old script calling the copy then continuing.
-cp -r "${GEMS_DIR}"/gmml/.hooks/* "${GEMS_DIR}"/gmml/.git/hooks/
+cp -r "${GEMS_DIR}"/gmmlForkTest/.hooks/* "${GEMS_DIR}"/gmmlForkTest/.git/hooks/
 
 #imagine this means "check if current branch is behind origin of the same branch". Basically all
 #we are doing are checking either the GEMS or GMML repo to ensure there are no commits that the
@@ -119,8 +119,8 @@ check_if_branch_behind()
                 exit 1
             }
         elif [ "$1" == "GMML" ]; then
-            cd "${GEMS_DIR}/gmml" || {
-                echo -e "${RED_BOLD}failed...${RESET_STYLE} We could not change directory to the following:\n\t ${GEMS_DIR}/gmml"
+            cd "${GEMS_DIR}/gmmlForkTest" || {
+                echo -e "${RED_BOLD}failed...${RESET_STYLE} We could not change directory to the following:\n\t ${GEMS_DIR}/gmmlForkTest"
                 echo "Exiting..."
                 exit 1
             }
@@ -163,8 +163,8 @@ check_if_branch_behind()
         else
             echo -e "${GREEN_BOLD}passed...${RESET_STYLE} Branch is not on remote, so no need to check if local is behind remote, proceeding"
         fi
-        cd "${GEMS_DIR}"/gmml || {
-            echo -e "${RED_BOLD}failed...${RESET_STYLE} We could not change directory to the following:\n\t ${GEMS_DIR}/gmml"
+        cd "${GEMS_DIR}"/gmmlForkTest || {
+            echo -e "${RED_BOLD}failed...${RESET_STYLE} We could not change directory to the following:\n\t ${GEMS_DIR}/gmmlForkTest"
             echo "Exiting..."
             exit 1
         }
@@ -231,10 +231,10 @@ cd "${GEMS_DIR}" || {
 
 #Add these removes so the tests don't pass on an old version of the library
 rm -f gmml.py _gmml.so
-rm -rf ./gmml/lib
-if [ -d "./gmml/cmakeBuild" ]; then
+rm -rf ./gmmlForkTest/lib
+if [ -d "./gmmlForkTest/cmakeBuild" ]; then
     echo "Removing the libgmml.so from our cmakeBuild directory"
-    rm ./gmml/cmakeBuild/libgmml.so
+    rm ./gmmlForkTest/cmakeBuild/libgmml.so
 fi
 
 echo "Compiling gmml using GEMS ./make.sh, no wrap flag cause it auto wraps"
@@ -242,8 +242,8 @@ echo "Compiling gmml using GEMS ./make.sh, no wrap flag cause it auto wraps"
 ./make.sh -j "$(nproc --all --ignore=2)"
 
 echo "Running mandatory GMML tests..."
-cd "${GEMS_DIR}"/gmml/tests/ || {
-    echo -e "${RED_BOLD}failed...${RESET_STYLE} We could not change directory to the following:\n\t ${GEMS_DIR}/gmml/tests/"
+cd "${GEMS_DIR}"/gmmlForkTest/tests/ || {
+    echo -e "${RED_BOLD}failed...${RESET_STYLE} We could not change directory to the following:\n\t ${GEMS_DIR}/gmmlForkTest/tests/"
     echo "Exiting..."
     exit 1
 }
