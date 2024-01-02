@@ -3,6 +3,8 @@ The GLYCAM Molecular Modeling Library (GMML) is typically used as a library acce
 
 [Overview](#overview)
 
+[Transistion Phase](#transistion-phase)
+
 [Prerequisites](#prerequisites)
 
 [Obtaining the software](#obtaining-the-software)
@@ -31,6 +33,29 @@ This code also serves as the main molecular modeling engine for GLYCAM-Web.
 We are very grateful to our funders.  
 [Please check them out!](https://github.com/GLYCAM-Web/website/blob/master/funding.md)
 
+
+## Transistion Phase
+In ~2021 a new central data structure was designed for gmml that didn't leak memory, used modern c++ practices and was more maintainable. Originally a part of gmml, it has matured to the point that it is completely separable from the old code, and replaces much of it. Oliver  decided to replace old gmml with this code in 3 phases. The phases allow Oliver to not have to keep compiling and testing ~90k lines of extra code when working on gmml2. Phase 1 allows us to not touch gems until the juggle branches have been integrated and tested. The separation should also help understandability of the gmml codebase. Currently, from the webtool perspective the dependencies are:
+#### Gmml:
+Glyfinder.
+Glycomimetics.
+#### Gmml2:
+Carbohydrate Builder (all versions e.g. gag builder)
+MDPrep (aka pdbpreprocessor)
+Glycoprotein Builder
+Draw Glycan (currently unused by website)
+
+### Phase 1: fork gmml to gmml2 and delete old code.
+No changes required at website or gems level. 
+Fork gmml to gmml2. Delete old code within the fork. Continue development and cherry-pick commits from gmml2 back into gmml as necessary. Gems continues to use gmml.
+
+#### Phase 2: Use gmml2 directly
+Changes required at gems level.
+Add gmml2 to gems and wrap it up separately. Gems will have to distinguish between the gmml2 versions. This is dangerous as it’s easy for gems to continue to silently use code from gmml instead of gmml2, but will allow us time to replace the remaining gmml code in gmml2.
+
+#### Phase 3: Replace old gmml with gmml2. 
+Changes required at gems level.
+Once all of gmml has been made redundant by gmml2. 
 
 ## Prerequisites
 
