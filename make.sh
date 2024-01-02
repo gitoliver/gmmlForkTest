@@ -14,12 +14,11 @@ AUTO_TESTIN_TIME=0
 #########                 PreCheck                     #########
 ################################################################
 #this is mostly used to ensure this script is being run where we expect this script to be run
-#aka from within the gmml directory itself. We just check if we are in a directory whose name ends with
-#gmml and we just check there are a couple key files. This is not a very good idea BUT it is better than
+#We just check that there are a couple key files. This is not a very good idea BUT it is better than
 #nothing. GEMSHOME requirement was taken out in order to help decrease complexity and help make life a
 #bit easier for users trying to build GMML from scratch
-if [[ "$(pwd)" == *"gmml" ]] && [ -f cmakeFileLists/cFileList.txt ] && [ -f cmakeFileLists/externalHDirectoryList.txt ] && [ -f cmakeFileLists/hDirectoryList.txt ] && [ -f CMakeLists.txt ]; then
-    echo "Lazy check to see you are running the script in the actual gmml directory passed so"
+if [ -f cmakeFileLists/cFileList.txt ] && [ -f cmakeFileLists/externalHDirectoryList.txt ] && [ -f cmakeFileLists/hDirectoryList.txt ] && [ -f CMakeLists.txt ]; then
+    echo "Lazy check to see you are running the script in the actual directory passed so"
     echo "continuing script. If you are not running this script in the actual gmml directory"
     echo -e "it exists in stuff is probably gonna break so please dont do that"
 else
